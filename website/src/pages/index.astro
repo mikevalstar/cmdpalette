@@ -1,85 +1,143 @@
 ---
+import '../scss/home.scss';
+import '../scss/prism.scss';
+import '../scss/prismLight.scss';
 import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
-import Test from '../components/test';
-import CmdPalette from '@cmdpalette/solid';
+import { Prism } from '@astrojs/prism';
+
+import CmdPaletted from '../components/AstroReactPalette';
+
 ---
 
-<Layout title="Welcome to Astro.">
+<Layout title="CmdPalette">
+	<CmdPaletted client:only="react" />
+	<header>
+		<img src="/cmdPaletteLogo.png" height='128px' />
+		<h1>CmdPalette</h1>
+		<h2>A Command Palette for your webapp or website</h2>
+	</header>
 	<main>
-    <Test name={'pooper'} client:only="solidjs" />
-    <CmdPalette client:only="solidjs"/> 
-		<h1>Welcome to <span class="text-gradient">Astro</span></h1>
-		<p class="instructions">
-			To get started, open the directory <code>src/pages</code> in your project.<br />
-			<strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
+		<p>
+			CmdPalette is a command palette for your webapp or website. 
+			It's a simple way to add a keyboard shortcut to your webapp or website that can allow you to quickly navigate to different pages or perform actions.
 		</p>
-		<ul role="list" class="link-card-grid">
-			<Card
-				href="https://docs.astro.build/"
-				title="Documentation"
-				body="Learn how Astro works and explore the official API docs."
-			/>
-			<Card
-				href="https://astro.build/integrations/"
-				title="Integrations"
-				body="Supercharge your project with new frameworks and libraries."
-			/>
-			<Card
-				href="https://astro.build/themes/"
-				title="Themes"
-				body="Explore a galaxy of community-built starter themes."
-			/>
-			<Card
-				href="https://astro.build/chat/"
-				title="Community"
-				body="Come say hi to our amazing Discord community. ❤️"
-			/>
-		</ul>
+
+		Try it now, press <kbd>Ctrl</kbd>+<kbd>k</kbd> or <kbd>Cmd</kbd>+<kbd>k</kbd> to open the palette.
+
+		<div id="selectedCmdElement" class="hide">hi</div>
+
+		<h3>Install</h3>
+		<Prism lang="bash" code={`npm install @cmdpalette/core @cmdpalette/react`} />
+
+		<h3>Usage</h3>
+
+		<p>Include in your <b>App.jsx</b></p>
+		<Prism lang="jsx" code={`import CmdPalette, { type ICmdCommand } from '../src/CmdPalette';
+
+import styles from './palette.module.scss';
+
+interface IMyCommand extends ICmdCommand {
+  meta?: string;
+}
+
+function saySelected(cmd: IMyCommand) {
+  const el = document.getElementById('selectedCmdElement');
+
+  if (el) {
+    el.innerText = 'You selected: ' + cmd.command + ' with a rating of: ' + cmd.meta;
+  }
+}
+
+const testcommands = async (): Promise<Array<IMyCommand>> => {
+  const actors = await fetch('/actors.json');
+  const actorList = await actors.json();
+
+  return actorList.map((actor) => {
+    return {
+      command: actor.name,
+      action: saySelected,
+      meta: actor.rating,
+    };
+  });
+};
+
+function App() {
+  return (
+    <CmdPalette commands={testcommands} className={styles['palette1']} count={10} />
+  );
+}
+
+export default App;
+`} />
+
+	<h3>Styles</h3>
+	<p>By default CmdPalette is unstyled, add your own styles by doing somethiing similar to this <b>palette.module.scss</b> example</p>
+<Prism lang="scss" code ={`.palette1 {
+  padding: 0;
+  border: 1px solid #ccc;
+  width: 500px;
+  max-width: 100%;
+  border-radius: 5px;
+
+  header {
+    border-bottom: 1px solid #ccc;
+
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1.25rem;
+      border: 0;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+  main {
+    section {
+      padding: 0.5em 0;
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        li {
+          display: block;
+          padding: 0.5em 1em;
+
+          &:global(.selected) {
+            background-color: rgba(0, 0, 255, 0.1);
+          }
+        }
+      }
+    }
+  }
+  footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    border-top: 1px solid #ccc;
+    background: #eee;
+    font-size: 0.9rem;
+
+    // 3 columns divs
+    div {
+      width: 33%;
+      text-align: center;
+
+      em {
+        padding: 0.25rem 0.5rem;
+        border-radius: 3px;
+        background: #777;
+        color: white;
+        font-size: 0.6rem;
+      }
+    }
+  }
+}
+
+.palette1::backdrop {
+  background-color: rgba(0, 0, 0, 0.4);
+}`}/>
+
 	</main>
 </Layout>
-
-<style>
-	main {
-		margin: auto;
-		padding: 1.5rem;
-		max-width: 60ch;
-	}
-	h1 {
-		font-size: 3rem;
-		font-weight: 800;
-		margin: 0;
-	}
-	.text-gradient {
-		background-image: var(--accent-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 400%;
-		background-position: 0%;
-	}
-	.instructions {
-		line-height: 1.6;
-		margin: 1rem 0;
-		border: 1px solid rgba(var(--accent), 25%);
-		background-color: white;
-		padding: 1rem;
-		border-radius: 0.4rem;
-	}
-	.instructions code {
-		font-size: 0.875em;
-		font-weight: bold;
-		background: rgba(var(--accent), 12%);
-		color: rgb(var(--accent));
-		border-radius: 4px;
-		padding: 0.3em 0.45em;
-	}
-	.instructions strong {
-		color: rgb(var(--accent));
-	}
-	.link-card-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-		gap: 1rem;
-		padding: 0;
-	}
-</style>

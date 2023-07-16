@@ -1,0 +1,26 @@
+:root {
+  @media (prefers-color-scheme: light) {
+    --text: #101d0c;
+    --background: #f9fcf8;
+    --primary: #9346aa;
+    --secondary: #efd7e8;
+    --accent: #6448b1;
+  }
+
+  // for people in dark mode
+  --text: #fafafa;
+  --background: #050505;
+  --primary: #9346aa;
+  --secondary: #240f1e;
+  --accent: #a392d3;
+}
+html {
+  font-family: system-ui, sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+}
+code,
+pre {
+  font-family: 'Fira Code', 'FiraCode', 'FiraCode Nerd Font', Menlo, Monaco, Lucida Console, Liberation Mono,
+    DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+}
