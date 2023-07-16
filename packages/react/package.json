@@ -1,6 +1,6 @@
 {
   "name": "@cmdpalette/react",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A command Palette for React websites",
   "homepage": "https://cmdpalette.dev",
   "main": "dist/index.umd.js",
@@ -52,5 +52,8 @@
   "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
+  },
+  "dependencies": {
+    "@cmdpalette/core": "*"
   }
 }
