@@ -1,13 +1,18 @@
 ![logo](/website/public/cmdPaletteLogo.png)
 
-# CmdPalette V0.1.0
+# CmdPalette
 
 A Command Palette Library for your Website or Webapp
+
+Available for:
+
+- React
+- SolidJS - _coming soon_
 
 ## Installation
 
 ```bash
-npm install @cmdpalette/core @astrojs/react
+npm install @cmdpalette/core @cmdpalette/react
 ```
 
 ## Usage
