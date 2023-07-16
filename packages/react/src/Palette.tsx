@@ -6,6 +6,7 @@ export interface IPaletteProps extends React.DialogHTMLAttributes<HTMLDialogElem
   count?: number;
   commands: ICmdCommand[] | (() => Promise<ICmdCommand[]>) | (() => ICmdCommand[]);
   close: () => void;
+  placeholder?: string;
 }
 
 function HighlightCharacters({ text, positions }: { text: string; positions: Set<number> }) {
@@ -25,7 +26,7 @@ function HighlightCharacters({ text, positions }: { text: string; positions: Set
 }
 
 function Palette(props: IPaletteProps) {
-  const { open, commands, count, close, ...dialogProps } = props;
+  const { open, commands, count, close, placeholder, ...dialogProps } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const [txt, setTxt] = useState('');
   const [rendFarmer, setRendFarmer] = useState(0);
@@ -123,7 +124,7 @@ function Palette(props: IPaletteProps) {
   return (
     <dialog {...dialogProps} ref={dialogRef}>
       <header>
-        <input value={txt} ref={inputRef} onChange={(e) => setTxt(e.target.value)} />
+        <input value={txt} ref={inputRef} placeholder={placeholder || ''} onChange={(e) => setTxt(e.target.value)} />
       </header>
       <main>
         <section>
@@ -131,7 +132,10 @@ function Palette(props: IPaletteProps) {
             {results.map((item, i) => {
               return (
                 <li key={i} className={item.selected ? 'selected' : ''}>
-                  <HighlightCharacters positions={item.positions} text={item.command.command} />
+                  <span>
+                    <HighlightCharacters positions={item.positions} text={item.command.command} />
+                  </span>
+                  {item.command.help && <span>{item.command.help}</span>}
                 </li>
               );
             })}

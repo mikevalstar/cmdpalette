@@ -7,16 +7,23 @@ const Palette = lazy(() => import('./Palette'));
 interface ICmdPalletProps extends React.DialogHTMLAttributes<HTMLDialogElement> {
   commands: ICmdCommand[] | (() => Promise<ICmdCommand[]>) | (() => ICmdCommand[]);
   count?: number;
+  open?: boolean;
+  placeholder?: string;
+  keyCommandCheck?: (e: KeyboardEvent) => boolean;
 }
 
 function CmdPalette(props: ICmdPalletProps) {
-  const { open, ...dialogProps } = props;
+  const { open, keyCommandCheck, ...dialogProps } = props;
   const [first, setFirst] = useState(false);
   const [show, setShow] = useState(false);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.metaKey && e.key === 'k') {
+      if (keyCommandCheck && !keyCommandCheck(e)) {
+        setShow((e) => !e);
+        setFirst(true);
+        e.preventDefault();
+      } else if ((e.metaKey && e.key === 'k') || (e.ctrlKey && e.key === 'k')) {
         setShow((e) => !e);
         setFirst(true);
         e.preventDefault();
@@ -26,9 +33,9 @@ function CmdPalette(props: ICmdPalletProps) {
     return () => document.removeEventListener('keydown', onKey);
   }, []);
 
-  return first ? (
+  return first || open ? (
     <Suspense>
-      <Palette open={show} close={() => setShow(false)} {...dialogProps} />
+      <Palette open={show || open} close={() => setShow(false)} {...dialogProps} />
     </Suspense>
   ) : (
     <></>

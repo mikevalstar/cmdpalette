@@ -9,11 +9,20 @@ interface IMyCommand extends ICmdCommand {
 const testcommands = async (): Promise<Array<IMyCommand>> => {
   await new Promise((resolve) => setTimeout(resolve, 100));
   return [
-    { command: 'test1', action: (cmd) => console.log(cmd.command, cmd.meta), meta: 'metadata' },
+    {
+      command: 'test1',
+      help: 'this is helper text',
+      action: (cmd) => console.log(cmd.command, cmd.meta),
+      meta: 'metadata',
+    },
     { command: 'test2', action: (cmd) => console.log(cmd.command) },
     { command: 'test3', action: (cmd) => console.log(cmd.command) },
-    { command: 'Mike Valstar', action: (cmd) => console.log(cmd.command) },
-    { command: 'Mike Vincent', action: (cmd) => console.log(cmd.command) },
+    { command: 'Mike Valstar', help: 'makes this website and stuff', action: (cmd) => console.log(cmd.command) },
+    {
+      command: 'Mike Vincent',
+      help: 'This is some really long text talking about how I once knew this guy with this name and im using it now to illustrate a point for elipsis',
+      action: (cmd) => console.log(cmd.command),
+    },
     { command: 'forms', action: (cmd) => console.log(cmd.command) },
     { command: 'views', action: (cmd) => console.log(cmd.command) },
     { command: 'test4', action: (cmd) => console.log(cmd.command) },
@@ -30,7 +39,7 @@ function App() {
     <div>
       <h2>React App here</h2>
 
-      <CmdPalette commands={testcommands} className={styles['test']} count={10} />
+      <CmdPalette placeholder={'Search'} commands={testcommands} className={styles['test']} count={10} />
     </div>
   );
 }

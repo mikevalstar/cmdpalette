@@ -5,6 +5,7 @@ import { Fzf, byStartAsc } from 'fzf';
 // TODO: Previews
 export interface ICmdCommand {
   command: string;
+  help?: string | null;
   action: (arg: this) => void;
 }
 

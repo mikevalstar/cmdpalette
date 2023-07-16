@@ -29,9 +29,19 @@
         li {
           display: block;
           padding: 0.5em 1em;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
 
           &:global(.selected) {
             background-color: rgba(0, 0, 255, 0.1);
+          }
+
+          span + span {
+            padding-left: 1em;
+            color: #777;
+            font-size: 0.8rem;
+            font-style: italic;
           }
         }
       }
