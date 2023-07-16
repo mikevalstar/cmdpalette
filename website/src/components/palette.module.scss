@@ -1,4 +1,4 @@
-.test {
+.palette {
   padding: 0;
   border: 1px solid #ccc;
   width: 500px;
@@ -61,7 +61,7 @@
   }
 }
 
-.test::backdrop {
+.palette::backdrop {
   background-color: rgba(0, 0, 0, 0.4);
 }
 

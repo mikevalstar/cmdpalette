@@ -10,9 +10,18 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/prism": "^2.1.2",
+    "@astrojs/react": "^2.2.1",
     "@astrojs/solid-js": "^2.2.0",
+    "@cmdpalette/core": "workspace:*",
+    "@cmdpalette/react": "workspace:*",
+    "@cmdpalette/solid": "workspace:*",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
     "astro": "^2.8.3",
-    "solid-js": "^1.7.8",
-    "@cmdpalette/solid": "workspace:*"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "sass": "^1.63.6",
+    "solid-js": "^1.7.8"
   }
 }
