@@ -1,11 +1,12 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect, useMemo, DialogHTMLAttributes } from 'react';
 import CmdCommander, { type ICmdCommand } from '@cmdpalette/core';
 
-export type PaletteProps = {
-  show: boolean;
+export interface IPaletteProps extends React.DialogHTMLAttributes<HTMLDialogElement> {
+  open: boolean;
+  count?: number;
   commands: ICmdCommand[] | (() => Promise<ICmdCommand[]>) | (() => ICmdCommand[]);
   close: () => void;
-};
+}
 
 function HighlightCharacters({ text, positions }: { text: string; positions: Set<number> }) {
   const textChars = text.split('');
@@ -23,16 +24,18 @@ function HighlightCharacters({ text, positions }: { text: string; positions: Set
   return <>{nodes}</>;
 }
 
-function Palette({ show, commands, close }: PaletteProps) {
+function Palette(props: IPaletteProps) {
+  const { open, commands, count, close, ...dialogProps } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const [txt, setTxt] = useState('');
   const [rendFarmer, setRendFarmer] = useState(0);
   const cmdr = useMemo(() => {
-    return new CmdCommander(5);
+    return new CmdCommander(count || 10);
   }, []);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
-    if (show) {
+    if (open) {
       inputRef.current?.focus();
     } else {
       setTxt('');
@@ -40,6 +43,10 @@ function Palette({ show, commands, close }: PaletteProps) {
 
     // set the key binds
     const onKey = (e: KeyboardEvent) => {
+      if (!open) {
+        return;
+      }
+
       if (e.key === 'Escape') {
         e.preventDefault();
         close();
@@ -68,34 +75,80 @@ function Palette({ show, commands, close }: PaletteProps) {
       }
     };
 
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [show]);
+    // trap clicking outside the dialog or the backdrop
+    const onClick = (e: MouseEvent) => {
+      if (!open || !dialogRef.current) {
+        return;
+      }
 
-  // only set the command when they change
+      // Bounding box as checking target = wont work if thedialog has padding (default browser behavior)
+      var rect = dialogRef.current.getBoundingClientRect();
+      var isInDialog =
+        rect.top <= e.clientY &&
+        e.clientY <= rect.top + rect.height &&
+        rect.left <= e.clientX &&
+        e.clientX <= rect.left + rect.width;
+
+      if (!isInDialog) {
+        close();
+      }
+    };
+
+    document.addEventListener('click', onClick);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('click', onClick);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
+
+  // only set the commands when they change, and on first load
   useEffect(() => {
     cmdr?.setCommands(commands).then(() => {
       setRendFarmer((e) => e + 1);
     });
   }, [commands]);
 
+  // handle opening and closing the dialog the html way; without this the backdrop doesnt work
+  useEffect(() => {
+    if (open) {
+      dialogRef.current?.showModal();
+    } else {
+      dialogRef.current?.close();
+    }
+  }, [open]);
+
+  const results = cmdr.getList(txt);
+
   return (
-    <dialog open={show}>
-      <div>
+    <dialog {...dialogProps} ref={dialogRef}>
+      <header>
         <input value={txt} ref={inputRef} onChange={(e) => setTxt(e.target.value)} />
-      </div>
-      <div>
-        <ul>
-          {cmdr.getList(txt).map((item, i) => {
-            return (
-              <li key={i} className={item.selected ? 'selected' : ''}>
-                <HighlightCharacters positions={item.positions} text={item.command.command} />
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-      <div>Key command legend</div>
+      </header>
+      <main>
+        <section>
+          <ul>
+            {results.map((item, i) => {
+              return (
+                <li key={i} className={item.selected ? 'selected' : ''}>
+                  <HighlightCharacters positions={item.positions} text={item.command.command} />
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      </main>
+      <footer>
+        <div>
+          {/*<em>↹ TAB</em>*/} <em>↑</em> <em>↓</em> to navigate
+        </div>
+        <div>
+          <em>⏎ Enter</em> to select
+        </div>
+        <div>
+          <em>Esc</em> to exit
+        </div>
+      </footer>
     </dialog>
   );
 }
