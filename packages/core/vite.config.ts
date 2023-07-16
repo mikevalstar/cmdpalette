@@ -20,11 +20,10 @@ export default defineConfig({
     },
     target: 'esnext',
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      external: ['fzf'],
       output: {
         globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM',
+          fzf: 'fzf',
         },
       },
     },

@@ -1,13 +1,14 @@
 {
   "name": "@cmdpalette/react",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "A command Palette for React websites",
   "homepage": "https://cmdpalette.dev",
-  "main": "./dist/index.umd.js",
-  "module": "./dist/index.es.js",
-  "types": "./dist/src/index.d.ts",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.es.js",
       "require": "./dist/index.umd.js"
     }
