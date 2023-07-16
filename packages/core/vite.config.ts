@@ -20,12 +20,10 @@ export default defineConfig({
     },
     target: 'esnext',
     rollupOptions: {
-      external: ['react', 'react-dom', '@cmdpalette/core'],
+      external: ['fzf'],
       output: {
         globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM',
-          '@cmdpalette/core': 'CmdPaletteCore',
+          fzf: 'fzf',
         },
       },
     },
