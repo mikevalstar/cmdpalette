@@ -1,13 +1,16 @@
 import { lazy, useEffect, useState, Suspense } from 'react';
-import { type CmdCommand } from '@cmdpalette/core';
+import { ICmdCommand } from '@cmdpalette/core';
 
 const Palette = lazy(() => import('./Palette'));
 
-const testcommands = async (): Promise<Array<CmdCommand>> => {
-  // await a 2 second timeout
+interface IMyCommand extends ICmdCommand {
+  meta?: string;
+}
+
+const testcommands = async (): Promise<Array<IMyCommand>> => {
   await new Promise((resolve) => setTimeout(resolve, 100));
   return [
-    { command: 'test1', action: (cmd) => console.log(cmd.command) },
+    { command: 'test1', action: (cmd) => console.log(cmd.command, cmd.meta), meta: 'metadata' },
     { command: 'test2', action: (cmd) => console.log(cmd.command) },
     { command: 'test3', action: (cmd) => console.log(cmd.command) },
     { command: 'Mike Valstar', action: (cmd) => console.log(cmd.command) },

@@ -1,23 +1,23 @@
 import { Fzf, byStartAsc } from 'fzf';
 
-export type CmdCommand = {
+export interface ICmdCommand {
   command: string;
-  action: (arg: CmdCommand) => void;
-};
+  action: (arg: this) => void;
+}
 
 class CmdCommander {
-  id: string = '';
+  count: number = 10;
   position: number = 0;
-  commands: CmdCommand[] = [];
+  commands: ICmdCommand[] = [];
   lastSearch: string = '';
-  lastUpdate: number = 55;
   results: Array<{ selected: boolean; command: string }> = [];
 
-  constructor() {
+  constructor(count: number) {
     this.position = 0;
+    this.count = count;
   }
 
-  async setCommands(commands: CmdCommand[] | (() => Promise<CmdCommand[]>) | (() => CmdCommand[])) {
+  async setCommands(commands: ICmdCommand[] | (() => Promise<ICmdCommand[]>) | (() => ICmdCommand[])) {
     if (typeof commands === 'function') {
       this.commands = await commands();
     } else {
@@ -25,12 +25,9 @@ class CmdCommander {
     }
   }
 
-  getList(
-    search: string,
-    count: number,
-  ): Array<{
+  getList(search: string): Array<{
     selected: boolean;
-    command: CmdCommand;
+    command: ICmdCommand;
     positions: Set<number>;
     score: number;
   }> {
@@ -41,7 +38,7 @@ class CmdCommander {
 
     const fzf = new Fzf(this.commands, {
       selector: (m) => m.command,
-      limit: count,
+      limit: this.count,
       tiebreakers: [byStartAsc],
     });
     const entries = fzf.find(search);
@@ -59,12 +56,14 @@ class CmdCommander {
   }
 
   getCurrent() {
-    const res = this.getList(this.lastSearch, this.position + 1);
+    const res = this.getList(this.lastSearch);
     return res[this.position].command;
   }
 
   moveNext() {
-    this.position++;
+    if (this.position < this.count - 1) {
+      this.position++;
+    }
   }
 
   movePrev() {

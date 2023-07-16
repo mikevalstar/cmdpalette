@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
-import CmdCommander, { type CmdCommand } from '@cmdpalette/core';
+import CmdCommander, { type ICmdCommand } from '@cmdpalette/core';
 
 export type PaletteProps = {
   show: boolean;
-  commands: CmdCommand[] | (() => Promise<CmdCommand[]>) | (() => CmdCommand[]);
+  commands: ICmdCommand[] | (() => Promise<ICmdCommand[]>) | (() => ICmdCommand[]);
   close: () => void;
 };
 
@@ -28,7 +28,7 @@ function Palette({ show, commands, close }: PaletteProps) {
   const [txt, setTxt] = useState('');
   const [rendFarmer, setRendFarmer] = useState(0);
   const cmdr = useMemo(() => {
-    return new CmdCommander();
+    return new CmdCommander(5);
   }, []);
 
   useEffect(() => {
@@ -86,7 +86,7 @@ function Palette({ show, commands, close }: PaletteProps) {
       </div>
       <div>
         <ul>
-          {cmdr.getList(txt, 5).map((item, i) => {
+          {cmdr.getList(txt).map((item, i) => {
             return (
               <li key={i} className={item.selected ? 'selected' : ''}>
                 <HighlightCharacters positions={item.positions} text={item.command.command} />
