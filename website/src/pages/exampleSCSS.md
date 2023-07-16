@@ -1,35 +1,12 @@
-@keyframes bounce-in {
-  0% {
-    transform: scale(0.5) translate3d(0, 0, 0);
-    opacity: 0;
-  }
-
-  50% {
-    transform: scale(1.05);
-    opacity: 0.9;
-  }
-
-  100% {
-    transform: scale(1) translate3d(0, 0, 0);
-    opacity: 1;
-  }
-}
-
-.palette {
+```scss
+.palette1 {
   padding: 0;
   border: 1px solid #ccc;
   width: 500px;
   max-width: 100%;
   border-radius: 5px;
-  transition: all 0.15s ease;
-  animation: bounce-in 0.2s ease;
-
-  @media (prefers-reduced-motion) {
-    animation: none !important;
-  }
 
   header {
-    padding: 0;
     border-bottom: 1px solid #ccc;
 
     input {
@@ -85,10 +62,7 @@
   }
 }
 
-.palette::backdrop {
+.palette1::backdrop {
   background-color: rgba(0, 0, 0, 0.4);
 }
-
-* {
-  box-sizing: border-box;
-}
+```

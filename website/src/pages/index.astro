@@ -7,6 +7,10 @@ import { Prism } from '@astrojs/prism';
 
 import CmdPaletted from '../components/AstroReactPalette';
 
+import * as codeInstall from './exampleInstall.md';
+import * as codejsx from './exampleJSX.md';
+import * as codescss from './exampleSCSS.md';
+
 ---
 
 <Layout title="CmdPalette">
@@ -27,117 +31,19 @@ import CmdPaletted from '../components/AstroReactPalette';
 		<div id="selectedCmdElement" class="hide">hi</div>
 
 		<h3>Install</h3>
-		<Prism lang="bash" code={`npm install @cmdpalette/core @cmdpalette/react`} />
+
+		<codeInstall.Content />
 
 		<h3>Usage</h3>
 
 		<p>Include in your <b>App.jsx</b></p>
-		<Prism lang="jsx" code={`import CmdPalette, { type ICmdCommand } from '../src/CmdPalette';
 
-import styles from './palette.module.scss';
+		<codejsx.Content />
 
-interface IMyCommand extends ICmdCommand {
-  meta?: string;
-}
+		<h3>Styles</h3>
+		<p>By default CmdPalette is unstyled, add your own styles by doing somethiing similar to this <b>palette.module.scss</b> example</p>
 
-function saySelected(cmd: IMyCommand) {
-  const el = document.getElementById('selectedCmdElement');
-
-  if (el) {
-    el.innerText = 'You selected: ' + cmd.command + ' with a rating of: ' + cmd.meta;
-  }
-}
-
-const testcommands = async (): Promise<Array<IMyCommand>> => {
-  const actors = await fetch('/actors.json');
-  const actorList = await actors.json();
-
-  return actorList.map((actor) => {
-    return {
-      command: actor.name,
-      action: saySelected,
-      meta: actor.rating,
-    };
-  });
-};
-
-function App() {
-  return (
-    <CmdPalette commands={testcommands} className={styles['palette1']} count={10} />
-  );
-}
-
-export default App;
-`} />
-
-	<h3>Styles</h3>
-	<p>By default CmdPalette is unstyled, add your own styles by doing somethiing similar to this <b>palette.module.scss</b> example</p>
-<Prism lang="scss" code ={`.palette1 {
-  padding: 0;
-  border: 1px solid #ccc;
-  width: 500px;
-  max-width: 100%;
-  border-radius: 5px;
-
-  header {
-    border-bottom: 1px solid #ccc;
-
-    input {
-      width: 100%;
-      padding: 0.75rem;
-      font-size: 1.25rem;
-      border: 0;
-
-      &:focus {
-        outline: none;
-      }
-    }
-  }
-  main {
-    section {
-      padding: 0.5em 0;
-      ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        li {
-          display: block;
-          padding: 0.5em 1em;
-
-          &:global(.selected) {
-            background-color: rgba(0, 0, 255, 0.1);
-          }
-        }
-      }
-    }
-  }
-  footer {
-    display: flex;
-    justify-content: space-between;
-    padding: 1rem;
-    border-top: 1px solid #ccc;
-    background: #eee;
-    font-size: 0.9rem;
-
-    // 3 columns divs
-    div {
-      width: 33%;
-      text-align: center;
-
-      em {
-        padding: 0.25rem 0.5rem;
-        border-radius: 3px;
-        background: #777;
-        color: white;
-        font-size: 0.6rem;
-      }
-    }
-  }
-}
-
-.palette1::backdrop {
-  background-color: rgba(0, 0, 0, 0.4);
-}`}/>
+		<codescss.Content />
 
 	</main>
 </Layout>
