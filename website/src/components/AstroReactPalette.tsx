@@ -6,27 +6,31 @@ interface IMyCommand extends ICmdCommand {
   meta?: string;
 }
 
+function saySelected(cmd: IMyCommand) {
+  const el = document.getElementById('selectedCmdElement');
+
+  if (el) {
+    el.classList.remove('hide');
+    el.innerText = 'You selected: ' + cmd.command + ' with a rating of ' + cmd.meta;
+  }
+}
+
 const testcommands = async (): Promise<Array<IMyCommand>> => {
-  await new Promise((resolve) => setTimeout(resolve, 100));
-  return [
-    { command: 'test1', action: (cmd) => console.log(cmd.command, cmd.meta), meta: 'metadata' },
-    { command: 'test2', action: (cmd) => console.log(cmd.command) },
-    { command: 'test3', action: (cmd) => console.log(cmd.command) },
-    { command: 'Mike Valstar', action: (cmd) => console.log(cmd.command) },
-    { command: 'Mike Vincent', action: (cmd) => console.log(cmd.command) },
-    { command: 'forms', action: (cmd) => console.log(cmd.command) },
-    { command: 'views', action: (cmd) => console.log(cmd.command) },
-    { command: 'test4', action: (cmd) => console.log(cmd.command) },
-    { command: 'other 1', action: (cmd) => console.log(cmd.command) },
-    { command: 'other 2', action: (cmd) => console.log(cmd.command) },
-    { command: 'other 3', action: (cmd) => console.log(cmd.command) },
-    { command: 'other 4', action: (cmd) => console.log(cmd.command) },
-    { command: 'other 5', action: (cmd) => console.log(cmd.command) },
-  ];
+  // fetch /actors.json
+  const actors = await fetch('/actors.json');
+  const actorList = await actors.json();
+
+  return actorList.map((actor) => {
+    return {
+      command: actor.name,
+      action: saySelected,
+      meta: actor.rating,
+    };
+  });
 };
 
 function CmdPaletted() {
-  return <CmdPalette commands={testcommands} className={styles['palette']} count={10} />;
+  return <CmdPalette key="pallet" commands={testcommands} className={styles['palette']} count={10} />;
 }
 
 export default CmdPaletted;
