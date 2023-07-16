@@ -3,7 +3,7 @@ import CmdCommander, { type CmdCommand } from '@cmdpalette/core';
 
 export type PaletteProps = {
   show: boolean;
-  commands: CmdCommand[];
+  commands: CmdCommand[] | (() => Promise<CmdCommand[]>) | (() => CmdCommand[]);
   close: () => void;
 };
 
@@ -14,7 +14,7 @@ function HighlightCharacters({ text, positions }: { text: string; positions: Set
   for (let i = 0; i < textChars.length; i++) {
     const char = textChars[i];
     if (positions.has(i)) {
-      nodes.push(<b>{char}</b>);
+      nodes.push(<b key={i}>{char}</b>);
     } else {
       nodes.push(char);
     }
@@ -28,7 +28,7 @@ function Palette({ show, commands, close }: PaletteProps) {
   const [txt, setTxt] = useState('');
   const [rendFarmer, setRendFarmer] = useState(0);
   const cmdr = useMemo(() => {
-    return new CmdCommander(commands);
+    return new CmdCommander();
   }, []);
 
   useEffect(() => {
@@ -74,7 +74,9 @@ function Palette({ show, commands, close }: PaletteProps) {
 
   // only set the command when they change
   useEffect(() => {
-    cmdr?.setCommands(commands);
+    cmdr?.setCommands(commands).then(() => {
+      setRendFarmer((e) => e + 1);
+    });
   }, [commands]);
 
   return (

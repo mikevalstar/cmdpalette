@@ -3,21 +3,25 @@ import { type CmdCommand } from '@cmdpalette/core';
 
 const Palette = lazy(() => import('./Palette'));
 
-const testcommands: Array<CmdCommand> = [
-  { command: 'test1', action: (cmd) => console.log(cmd.command) },
-  { command: 'test2', action: (cmd) => console.log(cmd.command) },
-  { command: 'test3', action: (cmd) => console.log(cmd.command) },
-  { command: 'Mike Valstar', action: (cmd) => console.log(cmd.command) },
-  { command: 'Mike Vincent', action: (cmd) => console.log(cmd.command) },
-  { command: 'forms', action: (cmd) => console.log(cmd.command) },
-  { command: 'views', action: (cmd) => console.log(cmd.command) },
-  { command: 'test4', action: (cmd) => console.log(cmd.command) },
-  { command: 'other 1', action: (cmd) => console.log(cmd.command) },
-  { command: 'other 2', action: (cmd) => console.log(cmd.command) },
-  { command: 'other 3', action: (cmd) => console.log(cmd.command) },
-  { command: 'other 4', action: (cmd) => console.log(cmd.command) },
-  { command: 'other 5', action: (cmd) => console.log(cmd.command) },
-];
+const testcommands = async (): Promise<Array<CmdCommand>> => {
+  // await a 2 second timeout
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  return [
+    { command: 'test1', action: (cmd) => console.log(cmd.command) },
+    { command: 'test2', action: (cmd) => console.log(cmd.command) },
+    { command: 'test3', action: (cmd) => console.log(cmd.command) },
+    { command: 'Mike Valstar', action: (cmd) => console.log(cmd.command) },
+    { command: 'Mike Vincent', action: (cmd) => console.log(cmd.command) },
+    { command: 'forms', action: (cmd) => console.log(cmd.command) },
+    { command: 'views', action: (cmd) => console.log(cmd.command) },
+    { command: 'test4', action: (cmd) => console.log(cmd.command) },
+    { command: 'other 1', action: (cmd) => console.log(cmd.command) },
+    { command: 'other 2', action: (cmd) => console.log(cmd.command) },
+    { command: 'other 3', action: (cmd) => console.log(cmd.command) },
+    { command: 'other 4', action: (cmd) => console.log(cmd.command) },
+    { command: 'other 5', action: (cmd) => console.log(cmd.command) },
+  ];
+};
 
 function CmdPalette() {
   const [show, setShow] = useState(false);

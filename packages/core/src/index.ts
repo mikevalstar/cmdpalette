@@ -13,13 +13,16 @@ class CmdCommander {
   lastUpdate: number = 55;
   results: Array<{ selected: boolean; command: string }> = [];
 
-  constructor(commands: CmdCommand[]) {
+  constructor() {
     this.position = 0;
-    this.commands = commands;
   }
 
-  setCommands(commands: CmdCommand[]) {
-    this.commands = commands;
+  async setCommands(commands: CmdCommand[] | (() => Promise<CmdCommand[]>) | (() => CmdCommand[])) {
+    if (typeof commands === 'function') {
+      this.commands = await commands();
+    } else {
+      this.commands = commands;
+    }
   }
 
   getList(
