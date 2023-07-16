@@ -1,20 +1,22 @@
 import { lazy, useEffect, useState, Suspense } from 'react';
+import { type CmdCommand } from '@cmdpalette/core';
 
 const Palette = lazy(() => import('./Palette'));
 
-const testcommands = [
-  'test1',
-  'test2',
-  'Mike Valstar',
-  'Mike Vincent',
-  'Other',
-  'Other2',
-  'Other3',
-  'Other4',
-  'Other5',
-  'chickens',
-  'chickens2',
-  'chickens3',
+const testcommands: Array<CmdCommand> = [
+  { command: 'test1', action: (cmd) => console.log(cmd.command) },
+  { command: 'test2', action: (cmd) => console.log(cmd.command) },
+  { command: 'test3', action: (cmd) => console.log(cmd.command) },
+  { command: 'Mike Valstar', action: (cmd) => console.log(cmd.command) },
+  { command: 'Mike Vincent', action: (cmd) => console.log(cmd.command) },
+  { command: 'forms', action: (cmd) => console.log(cmd.command) },
+  { command: 'views', action: (cmd) => console.log(cmd.command) },
+  { command: 'test4', action: (cmd) => console.log(cmd.command) },
+  { command: 'other 1', action: (cmd) => console.log(cmd.command) },
+  { command: 'other 2', action: (cmd) => console.log(cmd.command) },
+  { command: 'other 3', action: (cmd) => console.log(cmd.command) },
+  { command: 'other 4', action: (cmd) => console.log(cmd.command) },
+  { command: 'other 5', action: (cmd) => console.log(cmd.command) },
 ];
 
 function CmdPalette() {
@@ -33,7 +35,7 @@ function CmdPalette() {
 
   return show ? (
     <Suspense>
-      <Palette show={show} commands={testcommands} />
+      <Palette show={show} commands={testcommands} close={() => setShow(false)} />
     </Suspense>
   ) : (
     <></>

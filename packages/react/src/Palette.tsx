@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
-import CmdCommander from '@cmdpalette/core';
+import CmdCommander, { type CmdCommand } from '@cmdpalette/core';
 
 export type PaletteProps = {
   show: boolean;
-  commands: string[];
+  commands: CmdCommand[];
+  close: () => void;
 };
 
 function HighlightCharacters({ text, positions }: { text: string; positions: Set<number> }) {
@@ -22,7 +23,7 @@ function HighlightCharacters({ text, positions }: { text: string; positions: Set
   return <>{nodes}</>;
 }
 
-function Palette({ show, commands }: PaletteProps) {
+function Palette({ show, commands, close }: PaletteProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [txt, setTxt] = useState('');
   const [rendFarmer, setRendFarmer] = useState(0);
@@ -41,6 +42,13 @@ function Palette({ show, commands }: PaletteProps) {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault();
+        close();
+      } else if (e.key === 'Tab') {
+        e.preventDefault();
+        const cur = cmdr?.getCurrent();
+        if (cur) {
+          setTxt(cur.command);
+        }
         setRendFarmer((e) => e + 1);
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
@@ -50,6 +58,13 @@ function Palette({ show, commands }: PaletteProps) {
         e.preventDefault();
         cmdr?.moveNext();
         setRendFarmer((e) => e + 1);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        const cur = cmdr?.getCurrent();
+        if (cur) {
+          cur.action(cur);
+        }
+        close();
       }
     };
 
@@ -72,7 +87,7 @@ function Palette({ show, commands }: PaletteProps) {
           {cmdr.getList(txt, 5).map((item, i) => {
             return (
               <li key={i} className={item.selected ? 'selected' : ''}>
-                <HighlightCharacters positions={item.positions} text={item.command} />
+                <HighlightCharacters positions={item.positions} text={item.command.command} />
               </li>
             );
           })}

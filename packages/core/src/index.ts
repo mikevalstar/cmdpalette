@@ -1,19 +1,24 @@
 import { Fzf, byStartAsc } from 'fzf';
 
+export type CmdCommand = {
+  command: string;
+  action: (arg: CmdCommand) => void;
+};
+
 class CmdCommander {
   id: string = '';
   position: number = 0;
-  commands: string[] = [];
+  commands: CmdCommand[] = [];
   lastSearch: string = '';
   lastUpdate: number = 55;
   results: Array<{ selected: boolean; command: string }> = [];
 
-  constructor(commands: string[]) {
+  constructor(commands: CmdCommand[]) {
     this.position = 0;
     this.commands = commands;
   }
 
-  setCommands(commands: string[]) {
+  setCommands(commands: CmdCommand[]) {
     this.commands = commands;
   }
 
@@ -22,7 +27,7 @@ class CmdCommander {
     count: number,
   ): Array<{
     selected: boolean;
-    command: string;
+    command: CmdCommand;
     positions: Set<number>;
     score: number;
   }> {
@@ -31,7 +36,11 @@ class CmdCommander {
     }
     this.lastSearch = search;
 
-    const fzf = new Fzf(this.commands, { limit: count, tiebreakers: [byStartAsc] });
+    const fzf = new Fzf(this.commands, {
+      selector: (m) => m.command,
+      limit: count,
+      tiebreakers: [byStartAsc],
+    });
     const entries = fzf.find(search);
 
     const results = entries.map((m, i) => {
@@ -44,6 +53,11 @@ class CmdCommander {
     });
 
     return results;
+  }
+
+  getCurrent() {
+    const res = this.getList(this.lastSearch, this.position + 1);
+    return res[this.position].command;
   }
 
   moveNext() {
