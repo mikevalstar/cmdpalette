@@ -1,20 +1,30 @@
-import {
-  useState,
-  useRef,
-  useEffect,
-  useSyncExternalStore,
-  useMemo,
-} from "react";
-import CmdCommander from "@cmdpalette/core";
+import { useState, useRef, useEffect, useMemo } from 'react';
+import CmdCommander from '@cmdpalette/core';
 
 export type PaletteProps = {
   show: boolean;
   commands: string[];
 };
 
+function HighlightCharacters({ text, positions }: { text: string; positions: Set<number> }) {
+  const textChars = text.split('');
+  const nodes = [];
+
+  for (let i = 0; i < textChars.length; i++) {
+    const char = textChars[i];
+    if (positions.has(i)) {
+      nodes.push(<b>{char}</b>);
+    } else {
+      nodes.push(char);
+    }
+  }
+
+  return <>{nodes}</>;
+}
+
 function Palette({ show, commands }: PaletteProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [txt, setTxt] = useState("");
+  const [txt, setTxt] = useState('');
   const [rendFarmer, setRendFarmer] = useState(0);
   const cmdr = useMemo(() => {
     return new CmdCommander(commands);
@@ -24,27 +34,27 @@ function Palette({ show, commands }: PaletteProps) {
     if (show) {
       inputRef.current?.focus();
     } else {
-      setTxt("");
+      setTxt('');
     }
 
     // set the key binds
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         e.preventDefault();
         setRendFarmer((e) => e + 1);
-      } else if (e.key === "ArrowUp") {
+      } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         cmdr?.movePrev();
         setRendFarmer((e) => e + 1);
-      } else if (e.key === "ArrowDown") {
+      } else if (e.key === 'ArrowDown') {
         e.preventDefault();
         cmdr?.moveNext();
         setRendFarmer((e) => e + 1);
       }
     };
 
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
   }, [show]);
 
   // only set the command when they change
@@ -55,18 +65,14 @@ function Palette({ show, commands }: PaletteProps) {
   return (
     <dialog open={show}>
       <div>
-        <input
-          value={txt}
-          ref={inputRef}
-          onChange={(e) => setTxt(e.target.value)}
-        />
+        <input value={txt} ref={inputRef} onChange={(e) => setTxt(e.target.value)} />
       </div>
       <div>
         <ul>
           {cmdr.getList(txt, 5).map((item, i) => {
             return (
-              <li key={i} className={item.selected ? "selected" : ""}>
-                {item.command}
+              <li key={i} className={item.selected ? 'selected' : ''}>
+                <HighlightCharacters positions={item.positions} text={item.command} />
               </li>
             );
           })}

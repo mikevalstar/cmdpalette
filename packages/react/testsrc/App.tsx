@@ -1,11 +1,13 @@
-import CmdPalette from "../src/CmdPalette";
+import CmdPalette from '../src/CmdPalette';
 
-function App(){
-  return <div>
-    <h2>React App here</h2>
+function App() {
+  return (
+    <div>
+      <h2>React App here</h2>
 
-    <CmdPalette />
-  </div>;
+      <CmdPalette />
+    </div>
+  );
 }
 
 export default App;

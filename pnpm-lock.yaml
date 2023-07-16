@@ -7,6 +7,10 @@ settings:
 importers:
 
   packages/core:
+    dependencies:
+      fzf:
+        specifier: ^0.5.2
+        version: 0.5.2
     devDependencies:
       typescript:
         specifier: ^5.1.3
@@ -1948,6 +1952,10 @@ packages:
 
   /function-bind@1.1.1:
     resolution: {integrity: sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==}
+    dev: false
+
+  /fzf@0.5.2:
+    resolution: {integrity: sha512-Tt4kuxLXFKHy8KT40zwsUPUkg1CrsgY25FxA2U/j/0WgEDCk3ddc/zLTCCcbSHX9FcKtLuVaDGtGE/STWC+j3Q==}
     dev: false
 
   /gensync@1.0.0-beta.2:
