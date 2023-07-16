@@ -49,7 +49,6 @@ function saySelected(cmd: IMyCommand) {
 }
 
 const testcommands = async (): Promise<Array<IMyCommand>> => {
-  // fetch /actors.json
   const actors = await fetch('/actors.json');
   const actorList = await actors.json();
 
