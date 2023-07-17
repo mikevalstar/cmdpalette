@@ -19,7 +19,7 @@ function CmdPalette(props: ICmdPalletProps) {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (keyCommandCheck && !keyCommandCheck(e)) {
+      if (keyCommandCheck && keyCommandCheck(e)) {
         setShow((e) => !e);
         setFirst(true);
         e.preventDefault();

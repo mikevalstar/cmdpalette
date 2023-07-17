@@ -1,4 +1,4 @@
-import CmdPalette from '@cmdpalette/react';
+import CmdPalette, { type ICmdCommand } from '@cmdpalette/react';
 
 import styles from './palette.module.scss';
 
@@ -29,8 +29,13 @@ const testcommands = async (): Promise<Array<IMyCommand>> => {
   });
 };
 
+const keypress = (e: KeyboardEvent) => {
+  // check for command+i or ctrl+i and return true otherwise false
+  return (e.metaKey || e.ctrlKey) && e.key === 'i';
+};
+
 function CmdPaletted() {
-  return <CmdPalette key="pallet" commands={testcommands} className={styles['palette']} count={10} />;
+  return <CmdPalette commands={testcommands} keyCommandCheck={keypress} className={styles['palette']} count={10} />;
 }
 
 export default CmdPaletted;
