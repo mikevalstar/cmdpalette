@@ -35,7 +35,7 @@ function CmdPalette(props: ICmdPalletProps) {
 
   return first || open ? (
     <Suspense>
-      <Palette open={show || open} close={() => setShow(false)} {...dialogProps} />
+      <Palette open={show || open || false} close={() => setShow(false)} {...dialogProps} />
     </Suspense>
   ) : (
     <></>

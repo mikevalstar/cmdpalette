@@ -28,11 +28,39 @@
         padding: 0;
         margin: 0;
         li {
-          display: block;
+          display: flex;
+          justify-content: space-between;
           padding: 0.5em 1em;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          align-items: baseline;
 
           &:global(.selected) {
             background-color: rgba(0, 0, 255, 0.1);
+          }
+
+          span:first-child {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          span + span {
+            flex: 2;
+            padding-left: 1em;
+            color: #777;
+            font-size: 0.8rem;
+            font-style: italic;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          abbr {
+            width: 1em;
+            padding-left: 1em;
           }
         }
       }
@@ -46,7 +74,6 @@
     background: #eee;
     font-size: 0.9rem;
 
-    // 3 columns divs
     div {
       width: 33%;
       text-align: center;

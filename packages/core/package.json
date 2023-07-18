@@ -1,6 +1,6 @@
 {
   "name": "@cmdpalette/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Core module for the CmdPalette libraries",
   "homepage": "https://cmdpalette.dev",
   "main": "dist/index.umd.js",

@@ -21,6 +21,7 @@ See https://cmdpalette.dev/ for example usage.
 - **command** - The name of the command to be displayed in the palette
 - **action** - The function to be called when the command is selected, it will receive the command object back as a parameter
 - **help** - The help text to be displayed in the palette as helper text for your search
+- **subCommands** - add subcommands in the same format as commands above, they will lazy load when selected (tab)
 
 **count**: _`number`_ - The number of commands to be displayed in the palette, defaults to 10
 

@@ -39,11 +39,12 @@ function Palette(props: IPaletteProps) {
     if (open) {
       inputRef.current?.focus();
     } else {
+      cmdr?.resetCommands();
       setTxt('');
     }
 
     // set the key binds
-    const onKey = (e: KeyboardEvent) => {
+    const onKey = async (e: KeyboardEvent) => {
       if (!open) {
         return;
       }
@@ -54,7 +55,10 @@ function Palette(props: IPaletteProps) {
       } else if (e.key === 'Tab') {
         e.preventDefault();
         const cur = cmdr?.getCurrent();
-        if (cur) {
+        if (cur.subCommands) {
+          await cmdr?.enterSubCommand();
+          setTxt('');
+        } else if (cur) {
           setTxt(cur.command);
         }
         setRendFarmer((e) => e + 1);
@@ -69,10 +73,10 @@ function Palette(props: IPaletteProps) {
       } else if (e.key === 'Enter') {
         e.preventDefault();
         const cur = cmdr?.getCurrent();
-        if (cur) {
+        if (cur && cur.action) {
           cur.action(cur);
+          close();
         }
-        close();
       }
     };
 
@@ -136,6 +140,7 @@ function Palette(props: IPaletteProps) {
                     <HighlightCharacters positions={item.positions} text={item.command.command} />
                   </span>
                   {item.command.help && <span>{item.command.help}</span>}
+                  {item.command.subCommands && <abbr>&gt;</abbr>}
                 </li>
               );
             })}
@@ -144,7 +149,7 @@ function Palette(props: IPaletteProps) {
       </main>
       <footer>
         <div>
-          {/*<em>↹ TAB</em>*/} <em>↑</em> <em>↓</em> to navigate
+          <em>↹ TAB</em> <em>↑</em> <em>↓</em> to navigate
         </div>
         <div>
           <em>⏎ Enter</em> to select
