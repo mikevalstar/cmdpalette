@@ -24,3 +24,15 @@ pre {
   font-family: 'Fira Code', 'FiraCode', 'FiraCode Nerd Font', Menlo, Monaco, Lucida Console, Liberation Mono,
     DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
 }
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+#docs-footer {
+  text-align: center;
+}
